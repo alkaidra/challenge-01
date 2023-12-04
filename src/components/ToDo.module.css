@@ -32,6 +32,11 @@
     background: var(--blue-500);
 }
 
+.form > button[type="submit"]:disabled {
+    background: var(--gray-500);
+    cursor: not-allowed;
+}
+
 .status {
     display: flex;
     justify-content: space-between;
@@ -61,4 +66,24 @@ p > span {
 
 .finished {
     color: var(--purple-500);
+}
+
+.noData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--gray-300);
+}
+
+.noData > h2 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--gray-300);
+    margin-top: 1rem;
+}
+
+.noData > p {
+    font-size: 1rem;
 }

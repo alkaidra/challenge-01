@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { v4 as uuidv4 } from 'uuid';
+import { useState, ChangeEvent } from 'react';
 import { PlusCircle } from '@phosphor-icons/react';
+
 import styles from './ToDo.module.css'
 import { ToDoCard } from './ToDoCard';
-import { useState, ChangeEvent } from 'react';
+
+import Clipboard from '../assets/images/clipboardNoData.svg';
 
 export type Todo = {
     id: string;
@@ -27,17 +30,23 @@ export function ToDo() {
     }
 
     const onChangeStatus = (id: string) => {
-        const listTodos = todo.map(item => {
+        const listToDos = todo.map(item => {
             if (item.id === id) {
                 return {
                     ...item,
-                    finished: true
+                    finished: !item.finished
                 }
             }
             return item;
         });
 
-        setTodo(listTodos);
+        setTodo(listToDos);
+    }
+
+    const onDelete = (id: string) => {
+        const listToDos = todo.filter(item => item.id !== id);
+
+        setTodo(listToDos);
     }
 
     return (
@@ -51,6 +60,7 @@ export function ToDo() {
                 />
                 <button
                     type='submit'
+                    disabled={newTodo.length === 0}
                 >
                     Criar
                     <PlusCircle size={20} />
@@ -62,13 +72,25 @@ export function ToDo() {
                 <p className={styles.finished}>Concluídas <span>{todo.filter(item => item.finished === true).length} de {todo.length}</span></p>
             </div>
 
-            {todo.map(item => (
+            {todo.length === 0 && (
+                <div
+                    className={styles.noData}
+                >
+                    <img src={Clipboard} />
+
+                    <h2>Você ainda não tem tarefas cadastradas</h2>
+                    <p>Crie tarefas e organize seus itens a fazer</p>
+                </div>
+            )}
+
+            {todo.length > 0 && todo.map(item => (
                 <ToDoCard
                     key={item.id}
                     id={item.id}
                     content={item.content}
                     finished={item.finished}
                     onChangeStatus={onChangeStatus}
+                    onDelete={onDelete}
                 />
             ))}
         </div>
